@@ -21,6 +21,7 @@
 						<ul>
 							<li><a href="#intro">Welcome</a></li>
 							<li><a href="#introduction">Introduction</a></li>
+							<li><a href="#high">High Level Design</a></li>
 							<li><a href="#one">Who we are</a></li>
 							<li><a href="#two">What we do</a></li>
 							<li><a href="#three">Get in touch</a></li>
@@ -50,6 +51,40 @@
 							<p>Maurice Ravel’s Bolero is a piece where many instruments carry and pass along the same melodic line. This project aims to recreate the experience of standing in a room of musicians playing a snippet of this iconic work. Five different instrument sounds are synthesized to play the score’s three most common parts. A user has the ability to change the location of the instruments and hear their parts come from different directions. A VGA draws the instruments at their various locations, and updates as the user moves the instruments around. </p>
 						</div>
 					</section>
+				
+				
+				<!-- High -->
+					<section id="one" class="wrapper style2 spotlights">
+						<section>
+							<div class="content">
+								<h2>High Level Design</h2>
+								<div class="inner">
+									<h2>High Level Design</h2>
+									<h3>This project was broken down into three main parts: music synthesis, sound spatialization, and a user interface.</h3>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="content">
+								<div class="inner">
+									<h3>Sound Synthesis</h3>
+									<p>To synthesize various instruments, the Karplus-Strong Algorithm was used (see Figure #). The Karplus-Strong Algorithm is a digital waveguide synthesis algorithm that can model a string using a drive function, delay line, and filter. The drive function provides the initial positions for every node on a string. Once the string’s nodes are “released,” the feedback delay line creates the string’s oscillations. The length of the delay line determines the frequency of the oscillations. The lossy filter recreates the string’s damping. A delay line with more loss will cause the oscillations to decay at a faster rate than a delay line with less loss.</p>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="content">
+								<div class="inner">
+									<h2>Ultricies aliquam</h2>
+									<p>Phasellus convallis elit id ullamcorper pulvinar. Duis aliquam turpis mauris, eu ultricies erat malesuada quis. Aliquam dapibus.</p>
+									<ul class="actions">
+										<li><a href="generic.html" class="button">Learn more</a></li>
+									</ul>
+								</div>
+							</div>
+						</section>
+					</section>
+				
 				
 				<!-- One -->
 					<section id="one" class="wrapper style2 spotlights">
