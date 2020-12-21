@@ -120,7 +120,7 @@
 						<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-2"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-							<div class="col-8"><span class="image fit"><img src="images/FSM.png" alt="" /></span></div>
+							<div class="col-8"><span class="image fit"><img src="images/fsm-white.png" alt="" /></span></div>
 							</div>
 						</div>
 						
@@ -138,7 +138,7 @@
 						<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-							<div class="col-10"><span class="image fit"><img src="images/bolero.png" alt="" /></span></div>
+							<div class="col-10"><span class="image fit"><img src="images/bolero-white.png" alt="" /></span></div>
 							</div>
 						</div>
 						
@@ -215,12 +215,12 @@
 						<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-							<div class="col-10"><span class="image fit"><img src="images/modelsim3.PNG" alt="" /></span></div>
+							<div class="col-10"><span class="image fit"><img src="images/modelsim3.PNG" alt="" /></span><p><b>Figure 10:</b> Modelsim waveform for plucked and sustained sounds together, driven by the score module</p></div>
 							</div>
 						</div>
 						
 						<div class = "inner">
-							<p>The frequencies produced by the instrument module are accurate enough to be recognizable notes; however, they are not perfectly in tune. The input used for note frequency, string_len, had to be rounded because it is used as a memory pointer. The frequency errors are tabulated in Table #. All the produced frequencies lie within 2 Hz of the correct frequency.</p>
+							<p>The frequencies produced by the instrument module are accurate enough to be recognizable notes; however, they are not perfectly in tune. The input used for note frequency, <i>string_len</i>, had to be rounded because it is used as a memory pointer. The frequency errors are tabulated in Table 1. All the produced frequencies lie within 2 Hz of the correct frequency..</p>
 						
 									<div class="table-wrapper">
 										<table class="alt">
@@ -301,13 +301,14 @@
 												</tr>
 												
 											</tbody>
+											<p>Caption caption</p>
 										</table>
 									</div>
 						</div>
 						
 						<div class = "inner">
 							<h3>Sound Spatialization</h3>
-							<p>Before synthesizing our filters, we needed some way to verify they were working correctly. We originally developed the filters in ModelSim and exported the filtered output and compared this signal to one we knew was filtered correctly. Figure 11 shows a comparison of the same phase-shifted sine wave signal filtered by our Verilog FIR filter and the MATLAB filter() function. This figure shows that our filter module works correctly and generates filtered samples comparable to MATLAB.</p>
+							<p>Before synthesizing our filters, we needed some way to verify they were working correctly. We originally developed the filters in ModelSim and exported the filtered output and compared this signal to one we knew was filtered correctly. Figure 11 shows a comparison of the same phase-shifted sine wave signal filtered by our Verilog FIR filter and the MATLAB <i>filter()</i> function. This figure shows that our filter module works correctly and generates filtered samples comparable to MATLAB.</p>
 						
 							<div class="box alt">
 							<div class="row gtr-uniform">
@@ -319,10 +320,7 @@
 
 						</div>
 						
-						
-						<div class = "inner">
-							<p>Besides graphically comparing the two types of filters, we can also audibly confirm our Verilog filters were working correctly by listening to the filtered sine wave. You can <a href="images/sine_output.wav">click here</a> to listen to a short clip that will play the original non filtered sine wave, then a MATLAB left filtered sine wave, and finally a Verilog left filtered sine wave.</p>
-						</div>
+
 						
 						
 					</section>
