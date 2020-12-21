@@ -308,7 +308,15 @@
 						<div class = "inner">
 							<h3>Sound Spatialization</h3>
 							<p>Before synthesizing our filters, we needed some way to verify they were working correctly. We originally developed the filters in ModelSim and exported the filtered output and compared this signal to one we knew was filtered correctly. Figure 11 shows a comparison of the same phase-shifted sine wave signal filtered by our Verilog FIR filter and the MATLAB filter() function. This figure shows that our filter module works correctly and generates filtered samples comparable to MATLAB.</p>
+						
+							<div class="box alt">
+							<div class="row gtr-uniform">
+							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
+							<div class="col-10"><span class="image fit"><img src="images/matlabverilog.png" alt="" /><p><b>Figure 11</b></p></span></div>
+							</div>
 						</div>
+						</div>
+						
 						
 						<div class = "inner">
 							<p>Besides graphically comparing the two types of filters, we can also audibly confirm our Verilog filters were working correctly by listening to the filtered sine wave. You can <a href="images/sine_output.wav">click here</a> to listen to a short clip that will play the original non filtered sine wave, then a MATLAB left filtered sine wave, and finally a Verilog left filtered sine wave.</p>
