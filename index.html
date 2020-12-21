@@ -89,7 +89,11 @@
 							</div>
 
 						</section>
-						<a href="#" class="image"><img src="images/System.jpg" alt="" data-position="25% 25%" /></a>
+						<div class="box alt">
+							<div class="row gtr-uniform">
+							<div class="col-12"><span class="image fit"><img src="images/System.jpg" alt="" /></span></div>
+							</div>
+						</div>
 
 						
 					</section>
@@ -97,8 +101,8 @@
 				
 				<!-- Design -->
 					<section id="hdesign" class="wrapper style3 fade-up">
+						<a href="#" class="image"><img src="images/Instrument.png" alt="" data-position="25% 25%" /></a>
 						<div class="inner">
-							<a href="#" class="image"><img src="images/Instrument.png" alt="" data-position="25% 25%" /></a>
 							<h2>Hardware Design</h2>
 							<h3>Instrument module</h3>
 							<p>An instrument module is used to generate a note. It takes eight inputs: instr, type, duration, string_len, clk, GlobalReset, reset, and FIR_done. The instr input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The type input determines whether the module should output a plucked sound or a sustained sound. The duration input determines the length of a sound, if the sound is sustained. The string_len input determines the pitch (i.e. frequency) of the sound.  </p>
