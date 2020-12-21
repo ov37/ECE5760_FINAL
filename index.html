@@ -64,26 +64,21 @@
 									<h2>High Level Design</h2>
 									<h3>This project was broken down into three main parts: music synthesis, sound spatialization, and a user interface.</h3>
 								</div>
-							</div>
-						<section>
 								<div class="inner">
 									<h3>Sound Synthesis</h3>
 									<p>To synthesize various instruments, the Karplus-Strong Algorithm was used (see Figure #). The Karplus-Strong Algorithm is a digital waveguide synthesis algorithm that can model a string using a drive function, delay line, and filter. The drive function provides the initial positions for every node on a string. Once the string’s nodes are “released,” the feedback delay line creates the string’s oscillations. The length of the delay line determines the frequency of the oscillations. The lossy filter recreates the string’s damping. A delay line with more loss will cause the oscillations to decay at a faster rate than a delay line with less loss.</p>
 								</div>
-						</section>
-						<section>
+
 								<div class="inner">
 									<h3>Sound Spatialization</h3>
 									<p>To manipulate the sound so it had a directional component, we used the Center for Image Processing and Integrated Computing (CIPIC) Head Related Transfer Function (HRTF) Database from the University of California - Davis. Each instrument’s single mono channel is fed into a linear FIR filter module which uses the coefficients from the CIPIC HRTF database to produce a filtered instrument sound that sounds as if it is coming from either the left, right, or forward. After each instrument is filtered, the left channels of all instruments are summed and the right channels of all instruments are summed, before being outputted by the audio bus master.</p>
 								</div>
-						</section>
-						<section>
+
 								<div class="inner">
 									<h3>User Interface</h3>
 									<p>The user interacts with the system through a combination of the command line and VGA monitor. The command line is obtained by opening a SSH connection with the HPS and is used to start the program as well as to allow the user to move the instruments around a virtual room. The VGA monitor displays the virtual room and the current locations of the instruments so the user can visually place where the sounds are coming from, which adds to the overall illusion.</p>
 								</div>
 
-						</section>
 								<div class="inner">
 						<div class="box alt">
 							<div class="row gtr-uniform">
