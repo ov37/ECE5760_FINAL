@@ -146,16 +146,14 @@
 							<h3>FIR_filter Module</h3>
 							<p>The FIR filters are a collection of three different modules, each corresponding to a different direction. Based on the results of a large mux, different instruments would be fed into different filter modules in order to achieve the effect of spatial sound.</p>
 							<p>At reset, the 400 HRIR (200 left and 200 right) coefficients are stored in two 200 entry arrays of 27 bit registers which is used for the remainder of the program. This process takes 200 cycles because we could only fill one index of each array every cycle. In addition to these HRIR arrays, there is another array x that saves the previous 200 sample values within the filter module, but is initialized to be full of zeros. After these first 200 cycles are past, the module is ready to begin filtering samples. Once the sample is synthesized and reaches the filter module, it is saved in the first index of the array x.  Every cycle, a counter is incremented and which multiplies the value of the x array with its corresponding HRIR coefficient. The multiply is performed by two signed_27_mult modules in order to perform the left and right channels in parallel.</p>
-							<p>The product of every sample-coefficient pair is accumulated so that after 200 cycles, the sample is filtered and can be outputted. The filter module looks for the audio_done flag, signalling the audio bus master is ready to accept a sample before then putting its done flag high, signaling that the bus master can go ahead and read the output from the module. After this relay between the filter and bus master, the filter saves the next sample to the 0 index of the x array and shifts all previous values by one index to the right. This effectively makes x a running array of the previous 200 input samples.</p>
+							<p>The product of every sample-coefficient pair is accumulated so that after 200 cycles, the sample is filtered and can be outputted. The filter module looks for the <i>audio_done</i> flag, signalling the audio bus master is ready to accept a sample before then putting its <i>done</i> flag high, signaling that the bus master can go ahead and read the output from the module. After this relay between the filter and bus master, the filter saves the next sample to the 0 index of the x array and shifts all previous values by one index to the right. This effectively makes x a running array of the previous 200 input samples.</p>
 						</div>
-						<section>
 						<div class="box alt">
 							<div class="row gtr-uniform">
 								<div class="col-2"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-								<div class="col-8"><span class="image fit"><img src="images/Cycles.jpg" alt="" /></span></div>
+								<div class="col-8"><span class="image fit"><img src="images/Cycles.jpg" alt="" /><p><b>Figure 7:</b> A depiction of how a sample is filtered. Cycles 0-199 only occur when the module is reset, while Cycles 200-399 occur every time a sample is filtered.</p></span></div>
 							</div>
 						</div>
-						</section>
 						
 					</section>
 				
@@ -167,7 +165,7 @@
 								<div class="inner">
 									<h2>Software Design</h2>
 									<h3>User Interface</h3>
-									<p>The user interface is run entirely on the HPS and gives the user a way to interact with the sound output as well as view the progress of the system. The program starts by spawning two pthreads, write_VGA and read_terminal. At startup, the read_terminal thread uses scanf() calls to wait for the user to press enter to start the program. Meanwhile, the write_VGA thread writes the welcome screen to the VGA and waits to be given the signal from the other thread that the user is ready to begin. After the user presses enter, the read_terminal thread monitors the command line for user inputs to turn the instruments left or right. This thread is also responsible for relaying the current instrument configuration to the FPGA through a parallel input/output port. The VGA thread constantly checks if the configuration of the instruments has changed and if so, draws the instruments in the new correct locations.</p>
+									<p>The user interface is run entirely on the HPS and gives the user a way to interact with the sound output as well as view the progress of the system. The program starts by spawning two pthreads, <i>write_VGA</i> and <i>read_terminal</i>. At startup, the read_terminal thread uses <i>scanf()</i> calls to wait for the user to press enter to start the program. Meanwhile, the <i>write_VGA</i> thread writes the welcome screen to the VGA and waits to be given the signal from the other thread that the user is ready to begin. After the user presses enter, the <i>read_terminal</i> thread monitors the command line for user inputs to turn the instruments left or right. This thread is also responsible for relaying the current instrument configuration to the FPGA through a parallel input/output port. The VGA thread constantly checks if the configuration of the instruments has changed and if so, draws the instruments in the new correct locations.</p>
 								</div>
 						
 					</section>
@@ -179,8 +177,7 @@
 							<div class="inner">
 							<h2>Results</h2>
 							<h3>Sound Synthesis</h3>
-							<p>An instrument module is used to generate a note. It takes eight inputs: instr, type, duration, string_len, clk, GlobalReset, reset, and FIR_done. The instr input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The type input determines whether the module should output a plucked sound or a sustained sound. The duration input determines the length of a sound, if the sound is sustained. The string_len input determines the pitch (i.e. frequency) of the sound.  </p>
-							<p>To generate the sound samples, the Karplus-Strong Algorithm was used. This algorithm takes a drive function and uses feedback to create a note, as shown in Figure #. The difference between the algorithm for a plucked sound and a sustained sound is the repetition of the drive function. If the drive function is only input once into the system, the output will be a plucked sound. If the drive function is input periodically, the output will be a sustained sound.</p>
+								<p>The instrument and score modules were able to create the Bolero clip shown in Figure 6. Both modules were tested in ModelSim before FPGA synthesis.</p>
 							<p>In ModelSim, the instrument module was able to produce Figure 8’s waveform for a plucked-string sound. As shown in the screenshot, the output builds up quickly during the first few cycles, and then exponentially decays afterwards. </p>	
 						
 						
