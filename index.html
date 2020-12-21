@@ -95,46 +95,59 @@
 							<h2>Hardware Design</h2>
 							<h3>Instrument Module</h3>
 							<p>An instrument module is used to generate a note. It takes eight inputs: instr, type, duration, string_len, clk, GlobalReset, reset, and FIR_done. The instr input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The type input determines whether the module should output a plucked sound or a sustained sound. The duration input determines the length of a sound, if the sound is sustained. The string_len input determines the pitch (i.e. frequency) of the sound.  </p>
-							<p>To generate the sound samples, the Karplus-Strong Algorithm was used. This algorithm takes a drive function and uses feedback to create a note, as shown in Figure #. The difference between the algorithm for a plucked sound and a sustained sound is the repetition of the drive function. If the drive function is only input once into the system, the output will be a plucked sound. If the drive function is input periodically, the output will be a sustained sound.</p>
+							<p>To generate the sound samples, the Karplus-Strong Algorithm was used. This algorithm takes a drive function and uses feedback to create a note, as shown in Figure 2. The difference between the algorithm for a plucked sound and a sustained sound is the repetition of the drive function. If the drive function is only input once into the system, the output will be a plucked sound. If the drive function is input periodically, the output will be a sustained sound.</p>
 							</div>
 						
 
 						<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-							<div class="col-5"><span class="image fit"><img src="images/Instrument.png" alt="" /></span></div>
-							<div class="col-5"><span class="image fit"><img src="images/plucked.png" alt="" /></span></div>
+							<div class="col-5"><span class="image fit"><img src="images/Instrument-white.png" alt="" /><p><b>Figure 1:</b> The instrument module</p></span></div>
+								<div class="col-5"><span class="image fit"><img src="images/plucked.png" alt="" /><p><b>Figure 2:</b> The Karplus-Strong Algorithm for plucked sound (top); the Karplus-Strong Algorithm for a sustained sound (bottom). The drive function is highlighted in blue; the delay line is highlighted in red.</p></span></div>
 							</div>
 						</div>
 
 							<div class="inner">
 							<p>The pitch of the output sound is determined by the length of the drive function, which is also the length of the delay line. Because the audio CODEC has an output rate of 48,000 samples/second, the frequency of the output note is (48,000 samples/second)/(N samples) = 48,000/N Hz, where N is the length of a single period of the drive function.</p>
 							<p>The Karplus-Strong feedback loop uses a low-pass filter (LPF) and contains loss. The LPF is a simple average of the last two samples. The loss is on the order of 0.7%. This loss was chosen because it allows the algorithm to generate a tone without overflow. Without any loss, the loop would build up due to positive feedback and overflow. With too much loss, the drive function would completely dominate and the output will not converge to a sinusoidal-like wave.</p>
+							<p>Different instruments, or tambers, are produced by altering the drive function. The different drive functions are shown in Figure 3. Interestingly, we found that a plucked clarinet sounded like a plucked cello, and a plucked flute sounded like a marimba. Thus, the <i>instr</i> input selects the clarinet and flute drive functions when a cello or marimba sound is wanted, respectively. </p>
 							
-							<p>Different instruments, or tambers, are produced by altering the drive function. The different drive functions are shown in Figure #. Interestingly, we found that a plucked clarinet sounded like a plucked cello, and a plucked flute sounded like a marimba. Thus, the instr input selects the clarinet and flute drive functions when a cello or marimba sound is wanted, respectively. </p>
+							<div class="box alt">
+							<div class="row gtr-uniform">
+							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
+								<div class="col-10"><span class="image fit"><img src="images/instruments.png" alt="" /><p><b>Figure 3:</b> The drive functions for different instruments.</p></span></div>
+							</div>
+							</div>
+								
+								
 							<p>To save register memory, the selected instrument’s drive function and delay-line values are stored in M10K memory. In our first implementation of this project, we only used register (ALM) memory. We quickly discovered that our project would not fit in ALM memory due to the use of large register arrays in the instrument and the FIR modules. Two 20x512 M10K blocks were used (per instrument module) to decrease our ALM memory usage. This ultimately allowed our project to fit on the SoC.</p>
-							<p>The instrument module’s finite state machine (FSM) is shown in Figure #. Upon a user-input reset or a change of instruments, the instrument module enters its GlobalReset state. In that state, the selected instrument’s drive function is written to M10K over the course of 512 cycles. In each of the 512 cycles, a new drive sample value is written to M10K. </p>	
+							<p>The instrument module’s finite state machine (FSM) is shown in Figure 4. Upon a user-input reset or a change of instruments, the instrument module enters its GlobalReset state. In that state, the selected instrument’s drive function is written to M10K over the course of 512 cycles. In each of the 512 cycles, a new drive sample value is written to M10K. </p>	
 							<p>In the subsequent states, the drive function and previous-delay-line values are read from M10K. During the first iteration of the loop, the drive function is the output, so a read from the previous-delay-line M10K block is not necessary for the output calculation. Once the output is calculated, it gets stored in the previous-delay-line M10K block and the module returns to the Read State.</p>
 						</div>
 						
 						<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-2"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-							<div class="col-8"><span class="image fit"><img src="images/fsm-white.png" alt="" /></span></div>
+								<div class="col-8"><span class="image fit"><img src="images/fsm-white.png" alt="" /><p><b>Figure 4:</b> Instrument model FSM</p></span></div>
 							</div>
 						</div>
 						
 						<div class="inner">
-							<p>Every time there is a GlobalReset, 512 values are written to the drive-function M10K block. To achieve different output pitches, the pointer that reads from the M10K blocks circulates back to the string_len value. Therefore, higher-frequency notes will only use a small part of its drive function; lower-frequency notes will read more of the drive function.</p>
-							<p>The duration input is used if a note is sustained (i.e. type is sustained). The instrument module will continue to feed the drive function into the feedback loop for the duration number of samples. Once the drive function stops getting fed into the feedback loop, the output naturally decays (similar to a pluck’s decay).</p>
-							<p>The duration input is also used to amplitude-modulate the drive function as it gets fed into the loop. This was originally done to achieve a string instrument’s bowed sound, however, this feature was kept because it adds a smoothness to the start of a wind instrument’s sustained notes.</p>
+							<p>Every time there is a GlobalReset, 512 values are written to the drive-function M10K block. To achieve different output pitches, the pointer that reads from the M10K blocks circulates back to the <i>string_len</i> value. Therefore, higher-frequency notes will only use a small part of its drive function; lower-frequency notes will read more of the drive function.</p>
+							<p>The <i>duration</i> input is used if a note is sustained (i.e. <i>type</i> is sustained). The instrument module will continue to feed the drive function into the feedback loop for the <i>duration</i> number of samples. Once the drive function stops getting fed into the feedback loop, the output naturally decays (similar to a pluck’s decay).</p>
+							<p>The <i>duration</i> input is also used to amplitude-modulate the drive function as it gets fed into the loop. This was originally done to achieve a string instrument’s bowed sound, however, this feature was kept because it adds a smoothness to the start of a wind instrument’s sustained notes.</p>
+						</div>
+						
+						<div class="box alt">
+							<div class="row gtr-uniform">
+							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
+								<div class="col-10"><span class="image fit"><img src="images/graphs.png" alt="" /><p><b>Figure 5:</b> Amplitude modulation of an example drive function</p></span></div>
+							</div>
 						</div>
 						
 						<div class="inner">
 							<h3>Score Module</h3>
-							<p>An instrument module is used to generate a note. It takes eight inputs: instr, type, duration, string_len, clk, GlobalReset, reset, and FIR_done. The instr input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The type input determines whether the module should output a plucked sound or a sustained sound. The duration input determines the length of a sound, if the sound is sustained. The string_len input determines the pitch (i.e. frequency) of the sound.  </p>
-							<p>To generate the sound samples, the Karplus-Strong Algorithm was used. This algorithm takes a drive function and uses feedback to create a note, as shown in Figure #. The difference between the algorithm for a plucked sound and a sustained sound is the repetition of the drive function. If the drive function is only input once into the system, the output will be a plucked sound. If the drive function is input periodically, the output will be a sustained sound.</p>	
-						
+							<p>The score module instantiates and drives three instrument modules. One of the instrument modules is a plucked cello and one is a marimba. The third instrument module switches between three instruments: a flute, clarinet, and oboe.</p>
 						<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
