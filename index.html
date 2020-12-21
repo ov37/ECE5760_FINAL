@@ -118,9 +118,9 @@
 						
 						<div class="box alt">
 							<div class="row gtr-uniform">
-							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
+							<div class="col-2"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
 
-							<div class="col-10"><span class="image fit"><img src="images/FSM.png" alt="" /></span></div>
+							<div class="col-8"><span class="image fit"><img src="images/FSM.png" alt="" /></span></div>
 							</div>
 						</div>
 						
@@ -187,10 +187,11 @@
 						<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-							<div class="col-10"><span class="image fit"><img src="images/modelsim1.png" alt="" /></span></div>
+							<div class="col-10"><span class="image fit"><img src="images/modelsim1.png" alt="" /></span>
 								<p>Caption2 caption2 caption2</p>
+								</div>
+								
 							</div>
-							<p>Caption caption caption</p>
 						</div>
 						
 						<div class = "inner">
@@ -198,15 +199,16 @@
 						</div>
 						
 						<div class="box alt">
-							<figure>
+							
 							<div class="row gtr-uniform">
+								<figure>
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
 							
 							<div class="col-10"><span class="image fit"><img src="images/modelsim2.png" alt="" /></span></div>
-							
-							</div>
 							<figcaption>Caption goes here</figcaption>
 							</figure>
+							</div>
+							
 						</div>
 						
 						<div class = "inner">
@@ -215,7 +217,9 @@
 						
 						<div class="box alt">
 							<div class="row gtr-uniform">
-							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
+							<div class="col-1"><span class="image fit">
+								<figure><img src="images/filler.png" alt="" /><figcaption>Caption goes here</figcaption>
+							</figure></span></div>
 							<div class="col-10"><span class="image fit"><img src="images/modelsim3.PNG" alt="" /></span></div>
 							</div>
 						</div>
@@ -313,10 +317,21 @@
 					<section id="conc"  class="wrapper style2 fade-up">
 								<div class="inner">
 									<h2>Conclusion</h2>
-									<p>The user interface is run entirely on the HPS and gives the user a way to interact with the sound output as well as view the progress of the system. The program starts by spawning two pthreads, write_VGA and read_terminal. At startup, the read_terminal thread uses scanf() calls to wait for the user to press enter to start the program. Meanwhile, the write_VGA thread writes the welcome screen to the VGA and waits to be given the signal from the other thread that the user is ready to begin. After the user presses enter, the read_terminal thread monitors the command line for user inputs to turn the instruments left or right. This thread is also responsible for relaying the current instrument configuration to the FPGA through a parallel input/output port. The VGA thread constantly checks if the configuration of the instruments has changed and if so, draws the instruments in the new correct locations.</p>
+									<p>Our final project accomplished all our original goals. We intended on synthesizing different instruments, which we accomplished using the Karplus-Strong Algorithm. We also intended on changing the instruments’ sound direction, which we accomplished using HRTF coefficients in FIR filters. </p>
+									<p>With that being said, this project could be expanded and improved in a variety of ways. Currently, there is clicking in the output sound. This is caused by discontinuities in the samples given to the audio CODEC. The clicking could be removed if an additional averaging filter were used between output samples with large discontinuities. </p>
+									<p>Additionally, this project could be expanded to include more instruments and more sound directions. More instruments could be implemented by implementing more drive functions. More directions could be implemented by adding more FIR filters. Storing the filters’ coefficients in M10K memory would allow more instruments and filters to fit on the SoC.</p>
+									<p>Overall, we are satisfied with our design, and would like to thank Hunter Adams and Bruce Land for their guidance on this project. </p>
 								</div>
 						
 					</section>
+				
+				<section id="appendix" class="wrapper style3 fade-up">
+							<div class="inner">
+								<h2>Appendix</h2>
+								<h3>Appendix A</h3>
+								<p>The group approves this report for inclusion on the course website.<br>The group approves the video for inclusion on the course youtube channel.</p>
+							</div>
+				</section>
 				
 				
 				<!-- One -->
