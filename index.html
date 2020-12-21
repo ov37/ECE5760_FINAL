@@ -92,7 +92,7 @@
 						<section>
 						<div class="box alt">
 							<div class="row gtr-uniform">
-							<div class="col-8"><span class="image fit"><img src="images/System.jpg" alt="" /></span></div>
+							<div class="col-10"><span class="image fit"><img src="images/System.jpg" alt="" /></span></div>
 							</div>
 						</div>
 						</section>
@@ -103,8 +103,7 @@
 				<!-- Design -->
 					<section id="hdesign" class="wrapper style3 fade-up">
 						<section>
-							<a href="#" class="image"><img src="images/Instrument.png" alt="" data-position="center center" /></a>
-							<div class="content">
+							<div class="inner">
 							<h2>Hardware Design</h2>
 							<h3>Instrument module</h3>
 							<p>An instrument module is used to generate a note. It takes eight inputs: instr, type, duration, string_len, clk, GlobalReset, reset, and FIR_done. The instr input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The type input determines whether the module should output a plucked sound or a sustained sound. The duration input determines the length of a sound, if the sound is sustained. The string_len input determines the pitch (i.e. frequency) of the sound.  </p>
@@ -120,6 +119,16 @@
 							</div>
 						</div>
 						</section>
+						<section>
+							<div class="inner">
+							<p>The pitch of the output sound is determined by the length of the drive function, which is also the length of the delay line. Because the audio CODEC has an output rate of 48,000 samples/second, the frequency of the output note is (48,000 samples/second)/(N samples) = 48,000/N Hz, where N is the length of a single period of the drive function.</p>
+							<p>The Karplus-Strong feedback loop uses a low-pass filter (LPF) and contains loss. The LPF is a simple average of the last two samples. The loss is on the order of 0.7%. This loss was chosen because it allows the algorithm to generate a tone without overflow. Without any loss, the loop would build up due to positive feedback and overflow. With too much loss, the drive function would completely dominate and the output will not converge to a sinusoidal-like wave.</p>
+							
+							<p>Different instruments, or tambers, are produced by altering the drive function. The different drive functions are shown in Figure #. Interestingly, we found that a plucked clarinet sounded like a plucked cello, and a plucked flute sounded like a marimba. Thus, the instr input selects the clarinet and flute drive functions when a cello or marimba sound is wanted, respectively. </p>
+							<p>To save register memory, the selected instrument’s drive function and delay-line values are stored in M10K memory. In our first implementation of this project, we only used register (ALM) memory. We quickly discovered that our project would not fit in ALM memory due to the use of large register arrays in the instrument and the FIR modules. Two 20x512 M10K blocks were used (per instrument module) to decrease our ALM memory usage. This ultimately allowed our project to fit on the SoC.</p>
+							</div>
+						</section>
+						
 					</section>
 				
 				<!-- One -->
