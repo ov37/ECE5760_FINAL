@@ -134,25 +134,37 @@
 							<h3>Score Module</h3>
 							<p>An instrument module is used to generate a note. It takes eight inputs: instr, type, duration, string_len, clk, GlobalReset, reset, and FIR_done. The instr input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The type input determines whether the module should output a plucked sound or a sustained sound. The duration input determines the length of a sound, if the sound is sustained. The string_len input determines the pitch (i.e. frequency) of the sound.  </p>
 							<p>To generate the sound samples, the Karplus-Strong Algorithm was used. This algorithm takes a drive function and uses feedback to create a note, as shown in Figure #. The difference between the algorithm for a plucked sound and a sustained sound is the repetition of the drive function. If the drive function is only input once into the system, the output will be a plucked sound. If the drive function is input periodically, the output will be a sustained sound.</p>	
-						</div>
+						
 						<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-							<div class="col-10"><span class="image fit"><img src="images/bolero-white.png" alt="" /></span></div>
+							<div class="col-10"><span class="image fit"><img src="images/bolero-white.png" alt="" /><p><b>Figure 6:</b> The implemented score</p></span></div>
 							</div>
+						</div>
+							
+							<p>The flute plays the melody the first round, the clarinet plays the melody the second round, and the oboe plays the melody the third round through the piece. The entire piece (flute, clarinet, oboe) continues looping until the user stops it via the HPS command line. Figure 6 shows the score that was implemented in this module. </p>
+							<p>A counter variable determines the place in the piece. This variable increments every time the FIR filter reads a new sample. When a new note is to be played, the score module drives an instrument module’s <i>reset</i>, <i>duration</i>, and <i>string_len</i> inputs. The <i>duration</i> is calculated using:</p>
+							<p><i>Duration = (Number of beats)*BPM*(60 seconds/ minute)*(48,000 samples/ second)</i></p>
+							<p>In the above equation, BPM is Beats Per Minute, the standard unit for tempo. The tempo of the piece is 70 BPM. As an example, an sixteenth note (which is a quarter of a beat) will have a duration:</p>
+							<p><i>0.25 beats * 1/70 min/beat * 60 sec/min * 48000 samples/sec = 10,285 counts</i></p>
+							<p>Some of the longer notes are given a duration that is shorter than what the above equation calculates. This was done to allow the sound to decay before the next note is played. The <i>string_len</i> input was calculated using:</p>
+							<p><i>Length = (48,000 samples/sec) / (Desired frequency, Hz)</i></p>
+							<p>This equation provides the necessary length (i.e. necessary number of samples) of the drive function to get the desired frequency. Because the drive function samples are stored in a 20x512 M10K block, the lowest frequency note obtainable is 93.75 Hz. The highest frequency note obtainable is around 3,135 Hz. The highest frequency note is limited by the frequency difference between higher notes. Notes are log-base scaled, and thus adjacent higher-frequency notes are more closely spaced than adjacent lower-frequency notes. The Bolero clip uses the frequency range 130 - 587 Hz, which is well within our obtainable range. </p>
 						</div>
 						
 						<div class="inner">
 							<h3>FIR_filter Module</h3>
 							<p>The FIR filters are a collection of three different modules, each corresponding to a different direction. Based on the results of a large mux, different instruments would be fed into different filter modules in order to achieve the effect of spatial sound.</p>
-							<p>At reset, the 400 HRIR (200 left and 200 right) coefficients are stored in two 200 entry arrays of 27 bit registers which is used for the remainder of the program. This process takes 200 cycles because we could only fill one index of each array every cycle. In addition to these HRIR arrays, there is another array x that saves the previous 200 sample values within the filter module, but is initialized to be full of zeros. After these first 200 cycles are past, the module is ready to begin filtering samples. Once the sample is synthesized and reaches the filter module, it is saved in the first index of the array x.  Every cycle, a counter is incremented and which multiplies the value of the x array with its corresponding HRIR coefficient. The multiply is performed by two signed_27_mult modules in order to perform the left and right channels in parallel.</p>
-							<p>The product of every sample-coefficient pair is accumulated so that after 200 cycles, the sample is filtered and can be outputted. The filter module looks for the <i>audio_done</i> flag, signalling the audio bus master is ready to accept a sample before then putting its <i>done</i> flag high, signaling that the bus master can go ahead and read the output from the module. After this relay between the filter and bus master, the filter saves the next sample to the 0 index of the x array and shifts all previous values by one index to the right. This effectively makes x a running array of the previous 200 input samples.</p>
-						</div>
+							<p>At reset, the 400 HRIR (200 left and 200 right) coefficients are stored in two 200 entry arrays of 27 bit registers which is used for the remainder of the program. This process takes 200 cycles because we could only fill one index of each array every cycle. In addition to these HRIR arrays, there is another array <i>x</i> that saves the previous 200 sample values within the filter module, but is initialized to be full of zeros. After these first 200 cycles are past, the module is ready to begin filtering samples. Once the sample is synthesized and reaches the filter module, it is saved in the first index of the array <i>x</i>. Every cycle, a counter is incremented and which multiplies the value of the <i>x</i> array with its corresponding HRIR coefficient. The multiply is performed by two <i>signed_27_mult modules</i> in order to perform the left and right channels in parallel.</p>
+							
 						<div class="box alt">
 							<div class="row gtr-uniform">
 								<div class="col-2"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
 								<div class="col-8"><span class="image fit"><img src="images/Cycles.jpg" alt="" /><p><b>Figure 7:</b> A depiction of how a sample is filtered. Cycles 0-199 only occur when the module is reset, while Cycles 200-399 occur every time a sample is filtered.</p></span></div>
 							</div>
+						</div>
+							
+						<p>The product of every sample-coefficient pair is accumulated so that after 200 cycles, the sample is filtered and can be outputted. The filter module looks for the <i>audio_done</i> flag, signalling the audio bus master is ready to accept a sample before then putting its <i>done</i> flag high, signaling that the bus master can go ahead and read the output from the module. After this relay between the filter and bus master, the filter saves the next sample to the 0 index of the x array and shifts all previous values by one index to the right. This effectively makes x a running array of the previous 200 input samples.</p>
 						</div>
 						
 					</section>
