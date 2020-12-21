@@ -167,15 +167,11 @@
 				
 				<!-- Sdesign -->
 					<section id="sdesign"  class="wrapper style1 fade-up">
-						<section>
-							<div class="content">
 								<div class="inner">
 									<h2>Software Design</h2>
-									<h3>Instrument Module</h3>
+									<h3>User Interface</h3>
 									<p>The user interface is run entirely on the HPS and gives the user a way to interact with the sound output as well as view the progress of the system. The program starts by spawning two pthreads, write_VGA and read_terminal. At startup, the read_terminal thread uses scanf() calls to wait for the user to press enter to start the program. Meanwhile, the write_VGA thread writes the welcome screen to the VGA and waits to be given the signal from the other thread that the user is ready to begin. After the user presses enter, the read_terminal thread monitors the command line for user inputs to turn the instruments left or right. This thread is also responsible for relaying the current instrument configuration to the FPGA through a parallel input/output port. The VGA thread constantly checks if the configuration of the instruments has changed and if so, draws the instruments in the new correct locations.</p>
 								</div>
-							</div>
-						</section>
 						
 					</section>
 				
