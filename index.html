@@ -22,8 +22,8 @@
 							<li><a href="#intro">Welcome</a></li>
 							<li><a href="#introduction">Introduction</a></li>
 							<li><a href="#high">High Level Design</a></li>
-							<li><a href="#hdesign">Hardware Design</a></li>
-							<li><a href="#sdesign">Software Design</a></li>
+							<li><a href="#hdesign">FPGA Design</a></li>
+							<li><a href="#sdesign">HPS Design</a></li>
 							<li><a href="#results">Results</a></li>
 							<li><a href="#conc">Conclusion</a></li>
 							<li><a href="#appendix">Appendix</a></li>
@@ -69,7 +69,7 @@
 								</div>
 								<div class="inner">
 									<h3>Sound Synthesis</h3>
-									<p>To synthesize various instruments, the Karplus-Strong Algorithm was used (see Figure #). The Karplus-Strong Algorithm is a digital waveguide synthesis algorithm that can model a string using a drive function, delay line, and filter. The drive function provides the initial positions for every node on a string. Once the string’s nodes are “released,” the feedback delay line creates the string’s oscillations. The length of the delay line determines the frequency of the oscillations. The lossy filter recreates the string’s damping. A delay line with more loss will cause the oscillations to decay at a faster rate than a delay line with less loss.</p>
+									<p>To synthesize various instruments, the Karplus-Strong Algorithm was used (see Figure 2). The Karplus-Strong Algorithm is a digital waveguide synthesis algorithm that can model a string using a drive function, delay line, and filter. The drive function provides the initial positions for every node on a string. Once the string’s nodes are “released,” the feedback delay line creates the string’s oscillations. The length of the delay line determines the frequency of the oscillations. The lossy filter recreates the string’s damping. A delay line with more loss will cause the oscillations to decay at a faster rate than a delay line with less loss.</p>
 			
 									<h3>Sound Spatialization</h3>
 									<p>To manipulate the sound so it had a directional component, we used the Center for Image Processing and Integrated Computing (CIPIC) Head Related Transfer Function (HRTF) Database from the University of California - Davis. Each instrument’s single mono channel is fed into a linear FIR filter module which uses the coefficients from the CIPIC HRTF database to produce a filtered instrument sound that sounds as if it is coming from either the left, right, or forward. After each instrument is filtered, the left channels of all instruments are summed and the right channels of all instruments are summed, before being outputted by the audio bus master.</p>
@@ -81,7 +81,7 @@
 						<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-							<div class="col-10"><span class="image fit"><img src="images/System.jpg" alt="" /></span></div>
+							<div class="col-10"><span class="image fit"><img src="images/System.jpg" alt="" /><p><b>Figure 0: </b> A system diagram showing different modules and seperation between FPGA and HPS</p></span></div>
 							</div>
 						</div>
 							</div>
@@ -92,9 +92,9 @@
 				<!-- hDesign -->
 					<section id="hdesign" class="wrapper style3 fade-up">
 							<div class="inner">
-							<h2>Hardware Design</h2>
+							<h2>FPGA Design</h2>
 							<h3>Instrument Module</h3>
-							<p>An instrument module is used to generate a note. It takes eight inputs: instr, type, duration, string_len, clk, GlobalReset, reset, and FIR_done. The instr input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The type input determines whether the module should output a plucked sound or a sustained sound. The duration input determines the length of a sound, if the sound is sustained. The string_len input determines the pitch (i.e. frequency) of the sound.  </p>
+								<p>An instrument module is used to generate a note. It takes eight inputs: <i>instr</i>, <i>type</i>, <i>duration</i>, <i>string_len</i>, <i>clk</i>, <i>GlobalReset</i>, <i>reset</i>, and <i>FIR_done</i>. The <i>instr</i> input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The <i>type</i> input determines whether the module should output a plucked sound or a sustained sound. The <i>duration</i> input determines the length of a sound, if the sound is sustained. The <i>string_len</i> input determines the pitch (i.e. frequency) of the sound. The <i>clk</i> input is the global 50 MHz clock. The <i>GlobalReset</i> input tells the module to load a new drive function into M10K memory. The <i>reset</i> input starts a new note. The <i>FIR_done</i> input tells this module that the FIR filter has completed its calculation, and is ready for a new sample. The instrument module, at fastest, can output a new note sample once every four cycles. In actuality, the output rate of this module is synced with the output rate of the FIR filter.</p>
 							<p>To generate the sound samples, the Karplus-Strong Algorithm was used. This algorithm takes a drive function and uses feedback to create a note, as shown in Figure 2. The difference between the algorithm for a plucked sound and a sustained sound is the repetition of the drive function. If the drive function is only input once into the system, the output will be a plucked sound. If the drive function is input periodically, the output will be a sustained sound.</p>
 							</div>
 						
@@ -115,7 +115,7 @@
 							<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-								<div class="col-10"><span class="image fit"><img src="images/instruments.png" alt="" /><p><b>Figure 3:</b> The drive functions for different instruments.</p></span></div>
+								<div class="col-10"><span class="image fit"><img src="images/Instruments.png" alt="" /><p><b>Figure 3:</b> The drive functions for different instruments.</p></span></div>
 							</div>
 							</div>
 								
@@ -133,7 +133,7 @@
 						</div>
 						
 						<div class="inner">
-							<p>Every time there is a GlobalReset, 512 values are written to the drive-function M10K block. To achieve different output pitches, the pointer that reads from the M10K blocks circulates back to the <i>string_len</i> value. Therefore, higher-frequency notes will only use a small part of its drive function; lower-frequency notes will read more of the drive function.</p>
+							<p>Every time there is a <i>GlobalReset</i>, 512 values are written to the drive-function M10K block. To achieve different output pitches, the pointer that reads from the M10K blocks circulates back to the <i>string_len</i> value. Therefore, higher-frequency notes will only use a small part of its drive function; lower-frequency notes will read more of the drive function.</p>
 							<p>The <i>duration</i> input is used if a note is sustained (i.e. <i>type</i> is sustained). The instrument module will continue to feed the drive function into the feedback loop for the <i>duration</i> number of samples. Once the drive function stops getting fed into the feedback loop, the output naturally decays (similar to a pluck’s decay).</p>
 							<p>The <i>duration</i> input is also used to amplitude-modulate the drive function as it gets fed into the loop. This was originally done to achieve a string instrument’s bowed sound, however, this feature was kept because it adds a smoothness to the start of a wind instrument’s sustained notes.</p>
 						</div>
@@ -188,7 +188,7 @@
 				<!-- Sdesign -->
 					<section id="sdesign"  class="wrapper style2 fade-up">
 								<div class="inner">
-									<h2>Software Design</h2>
+									<h2>HPS Design</h2>
 									<h3>User Interface</h3>
 									<p>The user interface is run entirely on the HPS and gives the user a way to interact with the sound output as well as view the progress of the system. The program starts by spawning two pthreads, <i>write_VGA</i> and <i>read_terminal</i>. At startup, the read_terminal thread uses <i>scanf()</i> calls to wait for the user to press enter to start the program. Meanwhile, the <i>write_VGA</i> thread writes the welcome screen to the VGA and waits to be given the signal from the other thread that the user is ready to begin. After the user presses enter, the <i>read_terminal</i> thread monitors the command line for user inputs to turn the instruments left or right. This thread is also responsible for relaying the current instrument configuration to the FPGA through a parallel input/output port. The VGA thread constantly checks if the configuration of the instruments has changed and if so, draws the instruments in the new correct locations.</p>
 								</div>
