@@ -181,45 +181,44 @@
 							<h3>Sound Synthesis</h3>
 							<p>An instrument module is used to generate a note. It takes eight inputs: instr, type, duration, string_len, clk, GlobalReset, reset, and FIR_done. The instr input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The type input determines whether the module should output a plucked sound or a sustained sound. The duration input determines the length of a sound, if the sound is sustained. The string_len input determines the pitch (i.e. frequency) of the sound.  </p>
 							<p>To generate the sound samples, the Karplus-Strong Algorithm was used. This algorithm takes a drive function and uses feedback to create a note, as shown in Figure #. The difference between the algorithm for a plucked sound and a sustained sound is the repetition of the drive function. If the drive function is only input once into the system, the output will be a plucked sound. If the drive function is input periodically, the output will be a sustained sound.</p>
-							<p>In ModelSim, the instrument module was able to produce Figure #’s waveform for a plucked-string sound. As shown in the screenshot, the output builds up quickly during the first few cycles, and then exponentially decays afterwards. </p>	
+							<p>In ModelSim, the instrument module was able to produce Figure 8’s waveform for a plucked-string sound. As shown in the screenshot, the output builds up quickly during the first few cycles, and then exponentially decays afterwards. </p>	
 						
-						</div>
+						
 						
 						<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-							<div class="col-10"><span class="image fit"><img src="images/modelsim1.png" alt="" /></span>
-								<p>Caption caption caption</p>
+								<div class="col-10"><span class="image fit"><img src="images/modelsim1.png" alt="" /><p><b>Figure 8:</b> ModelSim waveform for a plucked string</p></span>
 								</div>
 								
 							</div>
 						</div>
 						
-						<div class = "inner">
-							<p>The instrument module produced Figure #’s waveform for a sustained sound. Amplitude modulation is used at the start of this waveform, which is partially why the output builds up over a sustained time. Once the drive function stops getting fed into the loop, the output exponentially decays.</p>
-						</div>
+						
+							<p>The instrument module produced Figure 9’s waveform for a sustained sound. Amplitude modulation is used at the start of this waveform, which is partially why the output builds up over a sustained time. Once the drive function stops getting fed into the loop, the output exponentially decays.</p>
+						
 						
 						<div class="box alt">
 							
 							<div class="row gtr-uniform">
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-							<div class="col-10"><span class="image fit"><img src="images/modelsim2.png" alt="" /><p>Caption caption caption</p></span></div>
+							<div class="col-10"><span class="image fit"><img src="images/modelsim2.png" alt="" /><p><b>Figure 9:</b> ModelSim waveform for sustained sound</p></span></div>
 							</div>
 							
 						</div>
 						
-						<div class = "inner">
-							<p>Putting the plucked and sustained sounds together produced the waveform in Figure #. The melodic line is dominant throughout the waveform; it provides the main build up and fall of output amplitude. The melodic line is dominant because it is a sustained sound, and therefore builds up more energy due to the consistent feeding of the drive function into the feedback loop. The other parts are visible in the “fuzz” around the melodic waveform. These parts synthesize lower frequency notes, which is why they appear more sparse.</p>
-						</div>
+						
+							<p>Putting the plucked and sustained sounds together produced the waveform in Figure 10. The melodic line is dominant throughout the waveform; it provides the main build up and fall of output amplitude. The melodic line is dominant because it is a sustained sound, and therefore builds up more energy due to the consistent feeding of the drive function into the feedback loop. The other parts are visible in the “fuzz” around the melodic waveform. These parts synthesize lower frequency notes, which is why they appear more sparse.</p>
+						
 						
 						<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-							<div class="col-10"><span class="image fit"><img src="images/modelsim3.PNG" alt="" /></span><p><b>Figure 10:</b> Modelsim waveform for plucked and sustained sounds together, driven by the score module</p></div>
+							<div class="col-10"><span class="image fit"><img src="images/modelsim3.PNG" alt="" /><p><b>Figure 10:</b> Modelsim waveform for plucked and sustained sounds together, driven by the score module</p></span></div>
 							</div>
 						</div>
 						
-						<div class = "inner">
+						
 							<p>The frequencies produced by the instrument module are accurate enough to be recognizable notes; however, they are not perfectly in tune. The input used for note frequency, <i>string_len</i>, had to be rounded because it is used as a memory pointer. The frequency errors are tabulated in Table 1. All the produced frequencies lie within 2 Hz of the correct frequency..</p>
 						
 									<div class="table-wrapper">
