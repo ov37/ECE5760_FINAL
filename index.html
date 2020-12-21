@@ -65,10 +65,12 @@
 							</div>
 						</section>
 						<section>
+							<div class="content">
 								<div class="inner">
 									<h3>Sound Synthesis</h3>
 									<p>To synthesize various instruments, the Karplus-Strong Algorithm was used (see Figure #). The Karplus-Strong Algorithm is a digital waveguide synthesis algorithm that can model a string using a drive function, delay line, and filter. The drive function provides the initial positions for every node on a string. Once the string’s nodes are “released,” the feedback delay line creates the string’s oscillations. The length of the delay line determines the frequency of the oscillations. The lossy filter recreates the string’s damping. A delay line with more loss will cause the oscillations to decay at a faster rate than a delay line with less loss.</p>
 								</div>
+							</div>
 						</section>
 						<section>
 							<div class="content">
@@ -87,11 +89,15 @@
 							</div>
 
 						</section>
+						<div class="content">
+								<div class="inner">
 						<div class="box alt">
 							<div class="row gtr-uniform">
-							<div class="col-6"><span class="image fit"><img src="images/System.jpg" alt="" /></span></div>
+							<div class="col-10"><span class="image fit"><img src="images/System.jpg" alt="" /></span></div>
 							</div>
 						</div>
+									</div>
+							</div>
 						
 					</section>
 				
@@ -100,7 +106,7 @@
 					<section id="hdesign" class="wrapper style3 fade-up">
 							<div class="inner">
 							<h2>Hardware Design</h2>
-							<h3>Instrument module</h3>
+							<h3>Instrument Module</h3>
 							<p>An instrument module is used to generate a note. It takes eight inputs: instr, type, duration, string_len, clk, GlobalReset, reset, and FIR_done. The instr input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The type input determines whether the module should output a plucked sound or a sustained sound. The duration input determines the length of a sound, if the sound is sustained. The string_len input determines the pitch (i.e. frequency) of the sound.  </p>
 							<p>To generate the sound samples, the Karplus-Strong Algorithm was used. This algorithm takes a drive function and uses feedback to create a note, as shown in Figure #. The difference between the algorithm for a plucked sound and a sustained sound is the repetition of the drive function. If the drive function is only input once into the system, the output will be a plucked sound. If the drive function is input periodically, the output will be a sustained sound.</p>
 							</div>
@@ -120,6 +126,17 @@
 							<p>Different instruments, or tambers, are produced by altering the drive function. The different drive functions are shown in Figure #. Interestingly, we found that a plucked clarinet sounded like a plucked cello, and a plucked flute sounded like a marimba. Thus, the instr input selects the clarinet and flute drive functions when a cello or marimba sound is wanted, respectively. </p>
 							<p>To save register memory, the selected instrument’s drive function and delay-line values are stored in M10K memory. In our first implementation of this project, we only used register (ALM) memory. We quickly discovered that our project would not fit in ALM memory due to the use of large register arrays in the instrument and the FIR modules. Two 20x512 M10K blocks were used (per instrument module) to decrease our ALM memory usage. This ultimately allowed our project to fit on the SoC.</p>
 							</div>
+						
+						<div class="inner">
+							<h3>Score Module</h3>
+							<p>An instrument module is used to generate a note. It takes eight inputs: instr, type, duration, string_len, clk, GlobalReset, reset, and FIR_done. The instr input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The type input determines whether the module should output a plucked sound or a sustained sound. The duration input determines the length of a sound, if the sound is sustained. The string_len input determines the pitch (i.e. frequency) of the sound.  </p>
+							<p>To generate the sound samples, the Karplus-Strong Algorithm was used. This algorithm takes a drive function and uses feedback to create a note, as shown in Figure #. The difference between the algorithm for a plucked sound and a sustained sound is the repetition of the drive function. If the drive function is only input once into the system, the output will be a plucked sound. If the drive function is input periodically, the output will be a sustained sound.</p>
+							</div>
+						<div class="box alt">
+							<div class="row gtr-uniform">
+							<div class="col-10"><span class="image fit"><img src="images/bolero.png" alt="" /></span></div>
+							</div>
+						</div>
 						
 					</section>
 				
