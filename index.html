@@ -101,8 +101,9 @@
 
 						<div class="box alt">
 							<div class="row gtr-uniform">
-							<div class="col-6"><span class="image fit"><img src="images/Instrument.png" alt="" /></span></div>
-							<div class="col-6"><span class="image fit"><img src="images/Instrument.png" alt="" /></span></div>
+							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
+							<div class="col-5"><span class="image fit"><img src="images/Instrument.png" alt="" /></span></div>
+							<div class="col-5"><span class="image fit"><img src="images/plucked.png" alt="" /></span></div>
 							</div>
 						</div>
 
@@ -119,7 +120,6 @@
 						<div class="box alt">
 							<div class="row gtr-uniform">
 							<div class="col-2"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-
 							<div class="col-8"><span class="image fit"><img src="images/FSM.png" alt="" /></span></div>
 							</div>
 						</div>
@@ -139,7 +139,6 @@
 							<div class="row gtr-uniform">
 							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
 							<div class="col-10"><span class="image fit"><img src="images/bolero.png" alt="" /></span></div>
-							<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
 							</div>
 						</div>
 						
@@ -149,12 +148,14 @@
 							<p>At reset, the 400 HRIR (200 left and 200 right) coefficients are stored in two 200 entry arrays of 27 bit registers which is used for the remainder of the program. This process takes 200 cycles because we could only fill one index of each array every cycle. In addition to these HRIR arrays, there is another array x that saves the previous 200 sample values within the filter module, but is initialized to be full of zeros. After these first 200 cycles are past, the module is ready to begin filtering samples. Once the sample is synthesized and reaches the filter module, it is saved in the first index of the array x.  Every cycle, a counter is incremented and which multiplies the value of the x array with its corresponding HRIR coefficient. The multiply is performed by two signed_27_mult modules in order to perform the left and right channels in parallel.</p>
 							<p>The product of every sample-coefficient pair is accumulated so that after 200 cycles, the sample is filtered and can be outputted. The filter module looks for the audio_done flag, signalling the audio bus master is ready to accept a sample before then putting its done flag high, signaling that the bus master can go ahead and read the output from the module. After this relay between the filter and bus master, the filter saves the next sample to the 0 index of the x array and shifts all previous values by one index to the right. This effectively makes x a running array of the previous 200 input samples.</p>
 						</div>
+						<section>
 						<div class="box alt">
 							<div class="row gtr-uniform">
-								<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
-								<div class="col-10"><span class="image fit"><img src="images/Cycles.jpg" alt="" /></span></div>
+								<div class="col-2"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
+								<div class="col-8"><span class="image fit"><img src="images/Cycles.jpg" alt="" /></span></div>
 							</div>
 						</div>
+						</section>
 						
 					</section>
 				
