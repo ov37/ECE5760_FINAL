@@ -23,6 +23,10 @@
 							<li><a href="#introduction">Introduction</a></li>
 							<li><a href="#high">High Level Design</a></li>
 							<li><a href="#hdesign">Hardware Design</a></li>
+							<li><a href="#sdesign">Software Design</a></li>
+							<li><a href="#results">Results</a></li>
+							<li><a href="#conc">Conclusion</a></li>
+							<li><a href="#appendix">Appendix</a></li>
 							<li><a href="#one">Who we are</a></li>
 							<li><a href="#two">What we do</a></li>
 							<li><a href="#three">Get in touch</a></li>
@@ -55,7 +59,7 @@
 				
 				
 				<!-- High -->
-					<section id="high" class="wrapper style2 spotlights">
+					<section id="high"  class="wrapper style1 fade-up">
 						<section>
 							<div class="content">
 								<div class="inner">
@@ -163,11 +167,45 @@
 						</div>
 						<div class="box alt">
 							<div class="row gtr-uniform">
-							<div class="col-12"><span class="image fit"><img src="images/Cycles.jpg" alt="" /></span></div>
+								<div class="col-1"><span class="image fit"><img src="images/filler.png" alt="" /></span></div>
+								<div class="col-10"><span class="image fit"><img src="images/Cycles.jpg" alt="" /></span></div>
 							</div>
 						</div>
 						
 					</section>
+				
+				
+				
+				
+				<!-- Sdesign -->
+					<section id="sdesign"  class="wrapper style1 fade-up">
+						<section>
+							<div class="content">
+								<div class="inner">
+									<h2>Software Design</h2>
+									<h3>Instrument Module</h3>
+									<p>The user interface is run entirely on the HPS and gives the user a way to interact with the sound output as well as view the progress of the system. The program starts by spawning two pthreads, write_VGA and read_terminal. At startup, the read_terminal thread uses scanf() calls to wait for the user to press enter to start the program. Meanwhile, the write_VGA thread writes the welcome screen to the VGA and waits to be given the signal from the other thread that the user is ready to begin. After the user presses enter, the read_terminal thread monitors the command line for user inputs to turn the instruments left or right. This thread is also responsible for relaying the current instrument configuration to the FPGA through a parallel input/output port. The VGA thread constantly checks if the configuration of the instruments has changed and if so, draws the instruments in the new correct locations.</p>
+								</div>
+							</div>
+						</section>
+						
+					</section>
+				
+				
+				<!-- Design -->
+					<section id="results" class="wrapper style3 fade-up">
+							<div class="inner">
+							<h2>Results</h2>
+							<h3>Sound Synthesis</h3>
+							<p>An instrument module is used to generate a note. It takes eight inputs: instr, type, duration, string_len, clk, GlobalReset, reset, and FIR_done. The instr input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The type input determines whether the module should output a plucked sound or a sustained sound. The duration input determines the length of a sound, if the sound is sustained. The string_len input determines the pitch (i.e. frequency) of the sound.  </p>
+							<p>To generate the sound samples, the Karplus-Strong Algorithm was used. This algorithm takes a drive function and uses feedback to create a note, as shown in Figure #. The difference between the algorithm for a plucked sound and a sustained sound is the repetition of the drive function. If the drive function is only input once into the system, the output will be a plucked sound. If the drive function is input periodically, the output will be a sustained sound.</p>
+							</div>
+					</section>
+				
+				
+				
+				
+				
 				
 				<!-- One -->
 					<section id="one" class="wrapper style2 spotlights">
