@@ -96,7 +96,7 @@
 							<h3>Instrument Module</h3>
 								<p>An instrument module is used to generate a note. It takes eight inputs: <i>instr</i>, <i>type</i>, <i>duration</i>, <i>string_len</i>, <i>clk</i>, <i>GlobalReset</i>, <i>reset</i>, and <i>FIR_done</i>. The <i>instr</i> input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The <i>type</i> input determines whether the module should output a plucked sound or a sustained sound. The <i>duration</i> input determines the length of a sound, if the sound is sustained. The <i>string_len</i> input determines the pitch (i.e. frequency) of the sound. The <i>clk</i> input is the global 50 MHz clock. The <i>GlobalReset</i> input tells the module to load a new drive function into M10K memory. The <i>reset</i> input starts a new note. The <i>FIR_done</i> input tells this module that the FIR filter has completed its calculation, and is ready for a new sample. The instrument module, at fastest, can output a new note sample once every four cycles. In actuality, the output rate of this module is synced with the output rate of the FIR filter.</p>
 							<p>To generate the sound samples, the Karplus-Strong Algorithm was used. This algorithm takes a drive function and uses feedback to create a note, as shown in Figure 2. The difference between the algorithm for a plucked sound and a sustained sound is the repetition of the drive function. If the drive function is only input once into the system, the output will be a plucked sound. If the drive function is input periodically, the output will be a sustained sound.</p>
-							</div>
+							
 						
 
 						<div class="box alt">
@@ -107,7 +107,7 @@
 							</div>
 						</div>
 
-							<div class="inner">
+							
 							<p>The pitch of the output sound is determined by the length of the drive function, which is also the length of the delay line. Because the audio CODEC has an output rate of 48,000 samples/second, the frequency of the output note is (48,000 samples/second)/(N samples) = 48,000/N Hz, where N is the length of a single period of the drive function.</p>
 							<p>The Karplus-Strong feedback loop uses a low-pass filter (LPF) and contains loss. The LPF is a simple average of the last two samples. The loss is on the order of 0.7%. This loss was chosen because it allows the algorithm to generate a tone without overflow. Without any loss, the loop would build up due to positive feedback and overflow. With too much loss, the drive function would completely dominate and the output will not converge to a sinusoidal-like wave.</p>
 							<p>Different instruments, or tambers, are produced by altering the drive function. The different drive functions are shown in Figure 3. Interestingly, we found that a plucked clarinet sounded like a plucked cello, and a plucked flute sounded like a marimba. Thus, the <i>instr</i> input selects the clarinet and flute drive functions when a cello or marimba sound is wanted, respectively. </p>
@@ -123,7 +123,7 @@
 							<p>To save register memory, the selected instrument’s drive function and delay-line values are stored in M10K memory. In our first implementation of this project, we only used register (ALM) memory. We quickly discovered that our project would not fit in ALM memory due to the use of large register arrays in the instrument and the FIR modules. Two 20x512 M10K blocks were used (per instrument module) to decrease our ALM memory usage. This ultimately allowed our project to fit on the SoC.</p>
 							<p>The instrument module’s finite state machine (FSM) is shown in Figure 4. Upon a user-input reset or a change of instruments, the instrument module enters its GlobalReset state. In that state, the selected instrument’s drive function is written to M10K over the course of 512 cycles. In each of the 512 cycles, a new drive sample value is written to M10K. </p>	
 							<p>In the subsequent states, the drive function and previous-delay-line values are read from M10K. During the first iteration of the loop, the drive function is the output, so a read from the previous-delay-line M10K block is not necessary for the output calculation. Once the output is calculated, it gets stored in the previous-delay-line M10K block and the module returns to the Read State.</p>
-						</div>
+						
 						
 						<div class="box alt">
 							<div class="row gtr-uniform">
@@ -132,7 +132,7 @@
 							</div>
 						</div>
 						
-						<div class="inner">
+						
 							<p>Every time there is a <i>GlobalReset</i>, 512 values are written to the drive-function M10K block. To achieve different output pitches, the pointer that reads from the M10K blocks circulates back to the <i>string_len</i> value. Therefore, higher-frequency notes will only use a small part of its drive function; lower-frequency notes will read more of the drive function.</p>
 							<p>The <i>duration</i> input is used if a note is sustained (i.e. <i>type</i> is sustained). The instrument module will continue to feed the drive function into the feedback loop for the <i>duration</i> number of samples. Once the drive function stops getting fed into the feedback loop, the output naturally decays (similar to a pluck’s decay).</p>
 							<p>The <i>duration</i> input is also used to amplitude-modulate the drive function as it gets fed into the loop. This was originally done to achieve a string instrument’s bowed sound, however, this feature was kept because it adds a smoothness to the start of a wind instrument’s sustained notes.</p>
@@ -372,9 +372,15 @@
 								<h3>Appendix D</h3>
 								<p>References</p>
 								<ul>
-												<li>Dolor pulvinar etiam.</li>
-												<li>Sagittis adipiscing.</li>
-												<li>Felis enim feugiat.</li>
+												<li><a href="https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data/">CIPIC HRTF Database</a></li>
+												<li><a href="https://people.ece.cornell.edu/land/courses/ece5760/">Course Website</a></li>
+												<li><a href="https://ccrma.stanford.edu/~jos/pasp/Karplus_Strong_Algorithm.htmll">Karplus Strong Algorithm</a></li>
+												<li><a href="http://people.ece.cornell.edu/land/courses/ece4760/PIC32/index_sound_synth.html">Sound Synthesis</a></li>
+												<li><a href="https://pages.mtu.edu/~suits/notefreqs.html">Note Frequencies</a></li>
+												<li><a href="https://www.mathworks.com/help/matlab/ref/filter.html#buagwwg-2">MATLAB <i>filter</i> Documentation</a></li>
+												<li><a href="https://electronics.stackexchange.com/questions/140410/verilog-fir-filter-using-fpga">Verilog FIR Filter</a></li>
+												<li><a href="https://www.slideshare.net/maliktauqir/fpga-11sequencedetectorfiriirfilter">Verilog FIR Filter</a></li>
+												
 								</ul>
 						</div>
 				</section>
