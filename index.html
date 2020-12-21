@@ -87,21 +87,10 @@
 									<p>The user interacts with the system through a combination of the command line and VGA monitor. The command line is obtained by opening a SSH connection with the HPS and is used to start the program as well as to allow the user to move the instruments around a virtual room. The VGA monitor displays the virtual room and the current locations of the instruments so the user can visually place where the sounds are coming from, which adds to the overall illusion.</p>
 								</div>
 							</div>
-							<a href="#" class="image"><img src="images/pic03.jpg" alt="" data-position="25% 25%" /></a>
+							<a href="#" class="image"><img src="images/System.jpg" alt="" data-position="50% 50%" /></a>
 
 						</section>
 						
-						<section>
-							<div class="content">
-								<div class="inner">
-									<h2>Ultricies aliquam</h2>
-									<p>Phasellus convallis elit id ullamcorper pulvinar. Duis aliquam turpis mauris, eu ultricies erat malesuada quis. Aliquam dapibus.</p>
-									<ul class="actions">
-										<li><a href="generic.html" class="button">Learn more</a></li>
-									</ul>
-								</div>
-							</div>
-						</section>
 					</section>
 				
 				
@@ -110,8 +99,10 @@
 						<div class="inner">
 							<h2>Hardware Design</h2>
 							<h3>Instrument module</h3>
-							<p>Maurice Ravel’s Bolero is a piece where many instruments carry and pass along the same melodic line. This project aims to recreate the experience of standing in a room of musicians playing a snippet of this iconic work. Five different instrument sounds are synthesized to play the score’s three most common parts. A user has the ability to change the location of the instruments and hear their parts come from different directions. A VGA draws the instruments at their various locations, and updates as the user moves the instruments around. </p>
+							<p>An instrument module is used to generate a note. It takes eight inputs: instr, type, duration, string_len, clk, GlobalReset, reset, and FIR_done. The instr input selects the type of instrument. For example, this input can select whether this module outputs a flute, clarinet, oboe, cello, or marimba sound. The type input determines whether the module should output a plucked sound or a sustained sound. The duration input determines the length of a sound, if the sound is sustained. The string_len input determines the pitch (i.e. frequency) of the sound.  </p>
+							<p>To generate the sound samples, the Karplus-Strong Algorithm was used. This algorithm takes a drive function and uses feedback to create a note, as shown in Figure #. The difference between the algorithm for a plucked sound and a sustained sound is the repetition of the drive function. If the drive function is only input once into the system, the output will be a plucked sound. If the drive function is input periodically, the output will be a sustained sound.</p>
 						</div>
+						<a href="#" class="image"><img src="images/Instrument.png" alt="" data-position="center center" /></a>
 					</section>
 				
 				<!-- One -->
